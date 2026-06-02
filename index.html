@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View live local forecasts, report local weather metrics, and track updates across cities with Smart Weather Forecast.">
+  <title>Smart Weather Forecast</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav id="userNavbar">
+    <div class="nav-links">
+      <a href="index.html" class="active" id="linkDashboard">Dashboard</a>
+      <a href="admin.html" id="linkAdmin">Admin Portal</a>
+    </div>
+    <div class="brand" id="navBrand">
+      ⛅ Smart Weather Forecast
+    </div>
+    <div class="nav-controls">
+      <button class="theme-btn" id="btnThemeToggle" aria-label="Toggle theme" type="button">🌓 Theme</button>
+    </div>
+  </nav>
+
+  <main>
+    <header class="dashboard-title">
+      <h1>City Weather Dashboard</h1>
+      <p style="color: var(--text-muted);">View current temperature reports and add updates for your local city.</p>
+    </header>
+
+    <section id="weatherReportFormSection">
+      <div class="card" style="margin-bottom: 2rem;">
+        <h2 class="card-title">Report Local Weather</h2>
+
+        <form id="addWeatherForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cityName">City Name</label>
+              <input type="text" id="cityName" class="form-control" placeholder="e.g. Lahore" required>
+              <div class="invalid-feedback" id="cityError">Please enter a valid city name (at least 3 characters).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cityTemp">Temperature (°C)</label>
+              <input type="number" id="cityTemp" class="form-control" placeholder="e.g. 25" required>
+              <div class="invalid-feedback" id="tempError">Please enter a valid temperature (between -50 and 60°C).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cityCondition">Weather Condition</label>
+              <select id="cityCondition" class="form-control" required>
+                <option value="" disabled selected>-- Select Condition --</option>
+                <option value="Sunny">Sunny</option>
+                <option value="Rainy">Rainy</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Windy">Windy</option>
+                <option value="Snowy">Snowy</option>
+              </select>
+              <div class="invalid-feedback" id="conditionError">Please select a weather condition.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cityHumidity">Humidity (%)</label>
+              <input type="number" id="cityHumidity" class="form-control" placeholder="e.g. 55" min="0" max="100" required>
+              <div class="invalid-feedback" id="humidityError">Please enter a valid humidity (0 to 100%).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cityWindSpeed">Wind Speed (km/h)</label>
+              <input type="number" id="cityWindSpeed" class="form-control" placeholder="e.g. 15" min="0" required>
+              <div class="invalid-feedback" id="windSpeedError">Please enter a valid wind speed (0 or greater).</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cityDate">Report Date</label>
+              <input type="date" id="cityDate" class="form-control" required>
+              <div class="invalid-feedback" id="dateError">Please select a valid date.</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btnSubmitWeather" style="margin-top: 0.5rem;">
+            Submit Weather Report
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section id="weatherListSection">
+      <div class="filter-bar" id="weatherFilterBar" style="margin-bottom: 1.5rem;">
+        <div class="filter-group">
+          <label for="filterCondition">Filter by Condition:</label>
+          <select id="filterCondition" class="form-control" style="width: auto;">
+            <option value="all">All Conditions</option>
+            <option value="Sunny">Sunny</option>
+            <option value="Rainy">Rainy</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Windy">Windy</option>
+            <option value="Snowy">Snowy</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="weatherCardsContainer"></div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
