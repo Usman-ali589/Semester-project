@@ -1,1 +1,68 @@
-
+{
+  "weather": [
+    {
+      "id": "1",
+      "city": "Lahore",
+      "temp": 38,
+      "condition": "Sunny",
+      "humidity": 45,
+      "windSpeed": 12,
+      "date": "2026-06-01"
+    },
+    {
+      "id": "2",
+      "city": "Karachi",
+      "temp": 33,
+      "condition": "Windy",
+      "humidity": 75,
+      "windSpeed": 28,
+      "date": "2026-06-01"
+    },
+    {
+      "id": "3",
+      "city": "Murree",
+      "temp": 18,
+      "condition": "Rainy",
+      "humidity": 80,
+      "windSpeed": 10,
+      "date": "2026-06-02"
+    },
+    {
+      "id": "4",
+      "city": "Islamabad",
+      "temp": 28,
+      "condition": "Cloudy",
+      "humidity": 60,
+      "windSpeed": 15,
+      "date": "2026-06-02"
+    },
+    {
+      "id": "5",
+      "city": "Gilgit",
+      "temp": 12,
+      "condition": "Snowy",
+      "humidity": 90,
+      "windSpeed": 8,
+      "date": "2026-06-01"
+    },
+    {
+      "id": "6",
+      "city": "Multan",
+      "temp": 42,
+      "condition": "Sunny",
+      "humidity": 30,
+      "windSpeed": 14,
+      "date": "2026-06-02"
+    },
+    {
+      "city": "BWN",
+      "temp": 45,
+      "condition": "Sunny",
+      "humidity": 50,
+      "windSpeed": 15,
+      "date": "2026-06-02",
+      "id": "J0R3WPW9x1Q"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
