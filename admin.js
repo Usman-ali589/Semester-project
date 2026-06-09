@@ -221,3 +221,168 @@ function renderTable() {
     });
   });
 }
+```javascript
+document.querySelectorAll('.btn-delete').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const id = btn.getAttribute('data-id');
+    confirmDelete(id);
+  });
+});
+
+async function loadRecordToEdit(id) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load details: HTTP ${response.status}`);
+    }
+
+    const rec = await response.json();
+
+    editCityId.value = rec.id;
+    editCityName.value = rec.city;
+    editCityTemp.value = rec.temp;
+    editCityCondition.value = rec.condition;
+    editCityHumidity.value = rec.humidity;
+    editCityWindSpeed.value = rec.windSpeed;
+    editCityDate.value = rec.date;
+
+    editInputs.forEach(input => input.classList.remove('is-invalid'));
+
+    editModalBackdrop.classList.add('show');
+  } catch (error) {
+    alert("Could not retrieve city details from database.");
+  }
+}
+
+function closeEditModal() {
+  editModalBackdrop.classList.remove('show');
+  editWeatherForm.reset();
+}
+
+async function submitEditForm(event) {
+  event.preventDefault();
+
+  if (!validateEditForm()) {
+    return;
+  }
+
+  const id = editCityId.value;
+
+  const updatedReport = {
+    city: editCityName.value.trim(),
+    temp: parseFloat(editCityTemp.value),
+    condition: editCityCondition.value,
+    humidity: parseInt(editCityHumidity.value, 10),
+    windSpeed: parseFloat(editCityWindSpeed.value),
+    date: editCityDate.value
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedReport)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update weather: HTTP ${response.status}`);
+    }
+
+    closeEditModal();
+    await fetchAdminData();
+  } catch (error) {
+    alert("Could not update city weather on JSON Server.");
+  }
+}
+
+async function confirmDelete(id) {
+  const rec = weatherRecords.find(r => r.id === id);
+  const city = rec ? rec.city : `#${id}`;
+
+  const hasConfirmed = confirm(
+    `⚠️ Are you sure you want to permanently delete the weather report for "${city}"?`
+  );
+
+  if (!hasConfirmed) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete report: HTTP ${response.status}`);
+    }
+
+    await fetchAdminData();
+  } catch (error) {
+    alert("Could not delete record from JSON Server database.");
+  }
+}
+
+function showLoading() {
+  adminTableContainer.innerHTML = `
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+      <p>Loading weather logs...</p>
+    </div>
+  `;
+}
+
+function showErrorState() {
+  adminTableContainer.innerHTML = `
+    <div class="error-state">
+      <h3>⚠️ Connection Error</h3>
+      <p>Could not communicate with the backend. Please check that JSON Server is running locally:</p>
+      <code style="display: block; margin: 0.5rem 0; background: rgba(0,0,0,0.1); padding: 0.4rem; border-radius: 4px; font-weight: bold;">
+        npx json-server --watch db.json --port 3000
+      </code>
+      <button class="btn btn-secondary btn-sm" id="btnRetryLoadAdmin">
+        🔄 Retry Connection
+      </button>
+    </div>
+  `;
+
+  const btnRetry = document.getElementById('btnRetryLoadAdmin');
+
+  if (btnRetry) {
+    btnRetry.addEventListener('click', fetchAdminData);
+  }
+}
+
+function escapeHTML(str) {
+  if (!str) return '';
+
+  return str.replace(
+    /[&<>'"]/g,
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag)
+  );
+}
+
+editWeatherForm.addEventListener('submit', submitEditForm);
+btnCancelEdit.addEventListener('click', closeEditModal);
+btnCancelCross.addEventListener('click', closeEditModal);
+
+window.addEventListener('click', (event) => {
+  if (event.target === editModalBackdrop) {
+    closeEditModal();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  fetchAdminData();
+});
+```
+
